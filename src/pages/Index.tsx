@@ -93,13 +93,8 @@ const Index = () => {
         <div className="flex justify-center mb-6">
           <div className="flex items-center gap-4 bg-slate-800/50 backdrop-blur-sm rounded-lg px-6 py-3 border border-slate-700">
             <div className="flex items-center gap-2">
-              <RefreshCw 
-                className={`text-blue-400 ${isLoading ? 'animate-spin' : ''}`} 
-                size={18} 
-              />
-              <span className="text-slate-300 text-sm">
-                {isLoading ? 'Updating...' : 'Active'}
-              </span>
+              <RefreshCw className="text-blue-400" size={18} />
+              <span className="text-slate-300 text-sm">Active</span>
             </div>
             
             <div className="w-px h-4 bg-slate-600"></div>
@@ -123,12 +118,12 @@ const Index = () => {
         </div>
 
         {/* Main State Machine Diagram */}
-        <Card className="max-w-6xl mx-auto mb-8 bg-slate-800/30 backdrop-blur-sm border-slate-700">
+        <Card className="max-w-full mx-auto mb-8 bg-slate-800/30 backdrop-blur-sm border-slate-700">
           <CardHeader className="text-center">
             <CardTitle className="text-white text-xl">State Machine Diagram</CardTitle>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-700" style={{ minHeight: '600px' }}>
+            <div className="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-700" style={{ minHeight: '800px' }}>
               {error1 ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
                   <AlertCircle size={48} className="mb-4 text-red-400" />
@@ -139,20 +134,13 @@ const Index = () => {
                   </p>
                 </div>
               ) : (
-                <>
-                  {isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50 z-10">
-                      <RefreshCw className="animate-spin text-blue-400" size={32} />
-                    </div>
-                  )}
-                  <img
-                    key={imageKey1}
-                    src={imageUrl1}
-                    alt="State machine diagram"
-                    className="w-full h-full object-contain transition-opacity duration-300"
-                    style={{ opacity: isLoading ? 0.5 : 1, minHeight: '600px' }}
-                  />
-                </>
+                <img
+                  key={imageKey1}
+                  src={imageUrl1}
+                  alt="State machine diagram"
+                  className="w-full h-full object-contain transition-opacity duration-300"
+                  style={{ minHeight: '800px' }}
+                />
               )}
             </div>
             
@@ -164,12 +152,12 @@ const Index = () => {
         </Card>
 
         {/* Inner State Machine */}
-        <Card className="max-w-6xl mx-auto mb-8 bg-slate-800/30 backdrop-blur-sm border-slate-700">
+        <Card className="max-w-full mx-auto mb-8 bg-slate-800/30 backdrop-blur-sm border-slate-700">
           <CardHeader className="text-center">
             <CardTitle className="text-white text-xl">Inner State Machine</CardTitle>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-700" style={{ minHeight: '600px' }}>
+            <div className="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-700" style={{ minHeight: '800px' }}>
               {error2 ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
                   <AlertCircle size={48} className="mb-4 text-red-400" />
@@ -180,20 +168,13 @@ const Index = () => {
                   </p>
                 </div>
               ) : (
-                <>
-                  {isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50 z-10">
-                      <RefreshCw className="animate-spin text-blue-400" size={32} />
-                    </div>
-                  )}
-                  <img
-                    key={imageKey2}
-                    src={imageUrl2}
-                    alt="Inner state machine"
-                    className="w-full h-full object-contain transition-opacity duration-300"
-                    style={{ opacity: isLoading ? 0.5 : 1, minHeight: '600px' }}
-                  />
-                </>
+                <img
+                  key={imageKey2}
+                  src={imageUrl2}
+                  alt="Inner state machine"
+                  className="w-full h-full object-contain transition-opacity duration-300"
+                  style={{ minHeight: '800px' }}
+                />
               )}
             </div>
             

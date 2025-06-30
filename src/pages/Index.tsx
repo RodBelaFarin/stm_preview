@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
-import { RefreshCw, AlertCircle, Camera, Clock } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import Header from '@/components/Header';
+import StatusBar from '@/components/StatusBar';
+import ImageCard from '@/components/ImageCard';
+import Instructions from '@/components/Instructions';
 
 const Index = () => {
   const [imageUrl1, setImageUrl1] = useState<string>('/api/state_machine_diagram.png');
@@ -97,218 +99,52 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [pollImages]);
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  };
-
   const hasAnyError = error1 || error2 || error3 || error4;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-3">
-            <Camera className="text-blue-400" size={40} />
-            State Machine Monitor
-          </h1>
-          <p className="text-slate-300 text-lg">
-            Real-time state machine diagram polling - Updates every second
-          </p>
-        </div>
+        <Header />
+        
+        <StatusBar lastUpdated={lastUpdated} hasAnyError={hasAnyError} />
 
-        {/* Status Bar */}
-        <div className="flex justify-center mb-6">
-          <div className="flex items-center gap-4 bg-slate-800/50 backdrop-blur-sm rounded-lg px-6 py-3 border border-slate-700">
-            <div className="flex items-center gap-2">
-              <RefreshCw className="text-blue-400" size={18} />
-              <span className="text-slate-300 text-sm">Active</span>
-            </div>
-            
-            <div className="w-px h-4 bg-slate-600"></div>
-            
-            <div className="flex items-center gap-2">
-              <Clock className="text-slate-400" size={18} />
-              <span className="text-slate-300 text-sm">
-                Last update: {formatTime(lastUpdated)}
-              </span>
-            </div>
-            
-            <div className="w-px h-4 bg-slate-600"></div>
-            
-            <Badge 
-              variant={hasAnyError ? "destructive" : "default"}
-              className={hasAnyError ? "bg-red-600" : "bg-green-600"}
-            >
-              {hasAnyError ? "Error" : "Online"}
-            </Badge>
-          </div>
-        </div>
+        <ImageCard
+          title="State Machine Diagram"
+          imageUrl={imageUrl1}
+          error={error1}
+          imageKey={imageKey1}
+          altText="State machine diagram"
+          imagePath="/api/state_machine_diagram.png"
+        />
 
-        {/* Main State Machine Diagram */}
-        <Card className="max-w-full mx-auto mb-8 bg-slate-800/30 backdrop-blur-sm border-slate-700">
-          <CardHeader className="text-center">
-            <CardTitle className="text-white text-xl">State Machine Diagram</CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <div className="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-700" style={{ minHeight: '800px' }}>
-              {error1 ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
-                  <AlertCircle size={48} className="mb-4 text-red-400" />
-                  <p className="text-lg font-medium mb-2">State machine diagram unavailable</p>
-                  <p className="text-sm text-slate-500">{error1}</p>
-                  <p className="text-xs text-slate-600 mt-2">
-                    Make sure your image is available at: /api/state_machine_diagram.png
-                  </p>
-                </div>
-              ) : (
-                <img
-                  key={imageKey1}
-                  src={imageUrl1}
-                  alt="State machine diagram"
-                  className="w-full h-full object-contain transition-opacity duration-300"
-                  style={{ minHeight: '800px' }}
-                />
-              )}
-            </div>
-            
-            <div className="mt-4 flex justify-between items-center text-sm text-slate-400">
-              <span>Auto-refresh: Every 1 second</span>
-              <span>Image source: /api/state_machine_diagram.png</span>
-            </div>
-          </CardContent>
-        </Card>
+        <ImageCard
+          title="Inner State Machine"
+          imageUrl={imageUrl2}
+          error={error2}
+          imageKey={imageKey2}
+          altText="Inner state machine"
+          imagePath="/api/inner_state_machine.png"
+        />
 
-        {/* Inner State Machine */}
-        <Card className="max-w-full mx-auto mb-8 bg-slate-800/30 backdrop-blur-sm border-slate-700">
-          <CardHeader className="text-center">
-            <CardTitle className="text-white text-xl">Inner State Machine</CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <div className="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-700" style={{ minHeight: '800px' }}>
-              {error2 ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
-                  <AlertCircle size={48} className="mb-4 text-red-400" />
-                  <p className="text-lg font-medium mb-2">Inner state machine unavailable</p>
-                  <p className="text-sm text-slate-500">{error2}</p>
-                  <p className="text-xs text-slate-600 mt-2">
-                    Make sure your image is available at: /api/inner_state_machine.png
-                  </p>
-                </div>
-              ) : (
-                <img
-                  key={imageKey2}
-                  src={imageUrl2}
-                  alt="Inner state machine"
-                  className="w-full h-full object-contain transition-opacity duration-300"
-                  style={{ minHeight: '800px' }}
-                />
-              )}
-            </div>
-            
-            <div className="mt-4 flex justify-between items-center text-sm text-slate-400">
-              <span>Auto-refresh: Every 1 second</span>
-              <span>Image source: /api/inner_state_machine.png</span>
-            </div>
-          </CardContent>
-        </Card>
+        <ImageCard
+          title="Third Diagram"
+          imageUrl={imageUrl3}
+          error={error3}
+          imageKey={imageKey3}
+          altText="Third diagram"
+          imagePath="/api/third_diagram.png"
+        />
 
-        {/* Third Diagram */}
-        <Card className="max-w-full mx-auto mb-8 bg-slate-800/30 backdrop-blur-sm border-slate-700">
-          <CardHeader className="text-center">
-            <CardTitle className="text-white text-xl">Third Diagram</CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <div className="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-700" style={{ minHeight: '800px' }}>
-              {error3 ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
-                  <AlertCircle size={48} className="mb-4 text-red-400" />
-                  <p className="text-lg font-medium mb-2">Third diagram unavailable</p>
-                  <p className="text-sm text-slate-500">{error3}</p>
-                  <p className="text-xs text-slate-600 mt-2">
-                    Make sure your image is available at: /api/third_diagram.png
-                  </p>
-                </div>
-              ) : (
-                <img
-                  key={imageKey3}
-                  src={imageUrl3}
-                  alt="Third diagram"
-                  className="w-full h-full object-contain transition-opacity duration-300"
-                  style={{ minHeight: '800px' }}
-                />
-              )}
-            </div>
-            
-            <div className="mt-4 flex justify-between items-center text-sm text-slate-400">
-              <span>Auto-refresh: Every 1 second</span>
-              <span>Image source: /api/third_diagram.png</span>
-            </div>
-          </CardContent>
-        </Card>
+        <ImageCard
+          title="Fourth Diagram"
+          imageUrl={imageUrl4}
+          error={error4}
+          imageKey={imageKey4}
+          altText="Fourth diagram"
+          imagePath="/api/fourth_diagram.png"
+        />
 
-        {/* Fourth Diagram */}
-        <Card className="max-w-full mx-auto mb-8 bg-slate-800/30 backdrop-blur-sm border-slate-700">
-          <CardHeader className="text-center">
-            <CardTitle className="text-white text-xl">Fourth Diagram</CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <div className="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-700" style={{ minHeight: '800px' }}>
-              {error4 ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
-                  <AlertCircle size={48} className="mb-4 text-red-400" />
-                  <p className="text-lg font-medium mb-2">Fourth diagram unavailable</p>
-                  <p className="text-sm text-slate-500">{error4}</p>
-                  <p className="text-xs text-slate-600 mt-2">
-                    Make sure your image is available at: /api/fourth_diagram.png
-                  </p>
-                </div>
-              ) : (
-                <img
-                  key={imageKey4}
-                  src={imageUrl4}
-                  alt="Fourth diagram"
-                  className="w-full h-full object-contain transition-opacity duration-300"
-                  style={{ minHeight: '800px' }}
-                />
-              )}
-            </div>
-            
-            <div className="mt-4 flex justify-between items-center text-sm text-slate-400">
-              <span>Auto-refresh: Every 1 second</span>
-              <span>Image source: /api/fourth_diagram.png</span>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Instructions */}
-        <div className="max-w-2xl mx-auto mt-8">
-          <Card className="bg-slate-800/20 backdrop-blur-sm border-slate-700">
-            <CardHeader>
-              <CardTitle className="text-white text-lg flex items-center gap-2">
-                <AlertCircle className="text-blue-400" size={20} />
-                Setup Instructions
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-slate-300 space-y-3">
-              <p>To use this state machine monitor:</p>
-              <ul className="list-disc list-inside space-y-2 text-sm">
-                <li>Place your state machine diagram at <code className="bg-slate-700 px-2 py-1 rounded text-blue-300">/public/api/state_machine_diagram.png</code></li>
-                <li>Place your inner state machine at <code className="bg-slate-700 px-2 py-1 rounded text-blue-300">/public/api/inner_state_machine.png</code></li>
-                <li>Place your third diagram at <code className="bg-slate-700 px-2 py-1 rounded text-blue-300">/public/api/third_diagram.png</code></li>
-                <li>Place your fourth diagram at <code className="bg-slate-700 px-2 py-1 rounded text-blue-300">/public/api/fourth_diagram.png</code></li>
-                <li>All images will automatically refresh every second</li>
-                <li>For dynamic images, ensure your source updates the files regularly</li>
-                <li>Supported formats: JPG, PNG, GIF, WebP</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
+        <Instructions />
       </div>
     </div>
   );

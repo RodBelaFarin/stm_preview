@@ -99,7 +99,7 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [pollImages]);
 
-  const hasAnyError = error1 || error2 || error3 || error4;
+  const hasAnyError = !!(error1 || error2 || error3 || error4);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">

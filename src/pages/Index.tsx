@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { RefreshCw, AlertCircle, Camera, Clock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,18 +6,26 @@ import { Badge } from '@/components/ui/badge';
 const Index = () => {
   const [imageUrl1, setImageUrl1] = useState<string>('/api/state_machine_diagram.png');
   const [imageUrl2, setImageUrl2] = useState<string>('/api/inner_state_machine.png');
+  const [imageUrl3, setImageUrl3] = useState<string>('/api/third_diagram.png');
+  const [imageUrl4, setImageUrl4] = useState<string>('/api/fourth_diagram.png');
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error1, setError1] = useState<string | null>(null);
   const [error2, setError2] = useState<string | null>(null);
+  const [error3, setError3] = useState<string | null>(null);
+  const [error4, setError4] = useState<string | null>(null);
   const [imageKey1, setImageKey1] = useState<number>(0);
   const [imageKey2, setImageKey2] = useState<number>(0);
+  const [imageKey3, setImageKey3] = useState<number>(0);
+  const [imageKey4, setImageKey4] = useState<number>(0);
 
   const pollImages = useCallback(async () => {
     try {
       const timestamp = Date.now();
       const newImageUrl1 = `/api/state_machine_diagram.png?t=${timestamp}`;
       const newImageUrl2 = `/api/inner_state_machine.png?t=${timestamp}`;
+      const newImageUrl3 = `/api/third_diagram.png?t=${timestamp}`;
+      const newImageUrl4 = `/api/fourth_diagram.png?t=${timestamp}`;
       
       // Test first image
       const img1 = new Image();
@@ -44,11 +51,37 @@ const Index = () => {
       };
       img2.src = newImageUrl2;
 
+      // Test third image
+      const img3 = new Image();
+      img3.onload = () => {
+        setImageUrl3(newImageUrl3);
+        setError3(null);
+        setImageKey3(prev => prev + 1);
+      };
+      img3.onerror = () => {
+        setError3('Failed to load third diagram');
+      };
+      img3.src = newImageUrl3;
+
+      // Test fourth image
+      const img4 = new Image();
+      img4.onload = () => {
+        setImageUrl4(newImageUrl4);
+        setError4(null);
+        setImageKey4(prev => prev + 1);
+      };
+      img4.onerror = () => {
+        setError4('Failed to load fourth diagram');
+      };
+      img4.src = newImageUrl4;
+
       setLastUpdated(new Date());
       setIsLoading(false);
     } catch (err) {
       setError1('Network error occurred');
       setError2('Network error occurred');
+      setError3('Network error occurred');
+      setError4('Network error occurred');
       setIsLoading(false);
       console.error('Polling error:', err);
     }
@@ -73,7 +106,7 @@ const Index = () => {
     });
   };
 
-  const hasAnyError = error1 || error2;
+  const hasAnyError = error1 || error2 || error3 || error4;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -185,6 +218,74 @@ const Index = () => {
           </CardContent>
         </Card>
 
+        {/* Third Diagram */}
+        <Card className="max-w-full mx-auto mb-8 bg-slate-800/30 backdrop-blur-sm border-slate-700">
+          <CardHeader className="text-center">
+            <CardTitle className="text-white text-xl">Third Diagram</CardTitle>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-700" style={{ minHeight: '800px' }}>
+              {error3 ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
+                  <AlertCircle size={48} className="mb-4 text-red-400" />
+                  <p className="text-lg font-medium mb-2">Third diagram unavailable</p>
+                  <p className="text-sm text-slate-500">{error3}</p>
+                  <p className="text-xs text-slate-600 mt-2">
+                    Make sure your image is available at: /api/third_diagram.png
+                  </p>
+                </div>
+              ) : (
+                <img
+                  key={imageKey3}
+                  src={imageUrl3}
+                  alt="Third diagram"
+                  className="w-full h-full object-contain transition-opacity duration-300"
+                  style={{ minHeight: '800px' }}
+                />
+              )}
+            </div>
+            
+            <div className="mt-4 flex justify-between items-center text-sm text-slate-400">
+              <span>Auto-refresh: Every 1 second</span>
+              <span>Image source: /api/third_diagram.png</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Fourth Diagram */}
+        <Card className="max-w-full mx-auto mb-8 bg-slate-800/30 backdrop-blur-sm border-slate-700">
+          <CardHeader className="text-center">
+            <CardTitle className="text-white text-xl">Fourth Diagram</CardTitle>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="relative bg-slate-900 rounded-lg overflow-hidden border border-slate-700" style={{ minHeight: '800px' }}>
+              {error4 ? (
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
+                  <AlertCircle size={48} className="mb-4 text-red-400" />
+                  <p className="text-lg font-medium mb-2">Fourth diagram unavailable</p>
+                  <p className="text-sm text-slate-500">{error4}</p>
+                  <p className="text-xs text-slate-600 mt-2">
+                    Make sure your image is available at: /api/fourth_diagram.png
+                  </p>
+                </div>
+              ) : (
+                <img
+                  key={imageKey4}
+                  src={imageUrl4}
+                  alt="Fourth diagram"
+                  className="w-full h-full object-contain transition-opacity duration-300"
+                  style={{ minHeight: '800px' }}
+                />
+              )}
+            </div>
+            
+            <div className="mt-4 flex justify-between items-center text-sm text-slate-400">
+              <span>Auto-refresh: Every 1 second</span>
+              <span>Image source: /api/fourth_diagram.png</span>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Instructions */}
         <div className="max-w-2xl mx-auto mt-8">
           <Card className="bg-slate-800/20 backdrop-blur-sm border-slate-700">
@@ -199,7 +300,9 @@ const Index = () => {
               <ul className="list-disc list-inside space-y-2 text-sm">
                 <li>Place your state machine diagram at <code className="bg-slate-700 px-2 py-1 rounded text-blue-300">/public/api/state_machine_diagram.png</code></li>
                 <li>Place your inner state machine at <code className="bg-slate-700 px-2 py-1 rounded text-blue-300">/public/api/inner_state_machine.png</code></li>
-                <li>Both images will automatically refresh every second</li>
+                <li>Place your third diagram at <code className="bg-slate-700 px-2 py-1 rounded text-blue-300">/public/api/third_diagram.png</code></li>
+                <li>Place your fourth diagram at <code className="bg-slate-700 px-2 py-1 rounded text-blue-300">/public/api/fourth_diagram.png</code></li>
+                <li>All images will automatically refresh every second</li>
                 <li>For dynamic images, ensure your source updates the files regularly</li>
                 <li>Supported formats: JPG, PNG, GIF, WebP</li>
               </ul>
